@@ -1,25 +1,21 @@
 package com.example.shopbasket.views;
 
-import com.example.shopbasket.models.Category;
 import com.example.shopbasket.models.Product;
 import com.example.shopbasket.repositories.CategoryRepository;
 import com.example.shopbasket.repositories.ProductRepository;
+import com.example.shopbasket.views.forms.ProductForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
-
-import java.util.concurrent.Executors;
-import java.util.stream.IntStream;
 
 @Route(value = "admin-view", layout = MainView.class)
 @PageTitle("Admin View")
@@ -27,7 +23,6 @@ import java.util.stream.IntStream;
 @SpringComponent
 public class AdminView extends VerticalLayout {
     Grid<Product> gridProducts;
-    Grid<Category> gridCategories;
 
     ProductForm productForm;
     ProductRepository productRepository;
@@ -38,28 +33,35 @@ public class AdminView extends VerticalLayout {
         this.categoryRepository = categoryRepository;
 
         gridProducts = new Grid<>(Product.class);
-        gridCategories = new Grid<>(Category.class);
 
         setSizeFull();
         configureGrid();
         configureForm();
 
-        add(getToolbar(), new H3("Products"), getContent());
+        add(getToolbar(), getContent());
         updateList();
         closeEditor();
         gridProducts.addComponentColumn(item -> new Button("Delete", click -> {}));
     }
 
     private Component getToolbar() {
+        H2 tableName = new H2("Products");
+
+        Button addProductButton = new Button("Add product");
+        addProductButton.addClickListener(e -> addProduct());
+
         Button refreshButton = new Button("Refresh");
         refreshButton.addClickListener(e -> {
             updateList();
             productForm.updateCategories(categoryRepository.findAll());
         });
 
-        Button addProductButton = new Button("Add product");
-        addProductButton.addClickListener(e -> addProduct());
-        return new HorizontalLayout(refreshButton, addProductButton);
+        HorizontalLayout toolbar = new HorizontalLayout(tableName, addProductButton, refreshButton);
+        toolbar.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        toolbar.expand(tableName);
+        toolbar.setWidthFull();
+        toolbar.addClassNames(LumoUtility.Padding.Vertical.NONE, LumoUtility.Padding.Horizontal.MEDIUM);
+        return toolbar;
     }
 
     private void configureGrid() {
@@ -86,8 +88,8 @@ public class AdminView extends VerticalLayout {
     private void configureForm() {
         productForm = new ProductForm(categoryRepository.findAll());
         productForm.setWidth("25em");
-        productForm.addSaveListener(this::saveProduct);
-        productForm.addDeleteListener(this::deleteProduct);
+//        productForm.addSaveListener(this::saveProduct);
+//        productForm.addDeleteListener(this::deleteProduct);
         productForm.addCloseListener(e -> closeEditor());
     }
 

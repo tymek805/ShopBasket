@@ -1,6 +1,5 @@
 package com.example.shopbasket.models;
 
-import com.vaadin.hilla.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Product {
+public class Product implements Identifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,6 +17,5 @@ public class Product {
     private double weight;
     private double price;
     @ManyToOne
-    @Nullable
     private Category category;
 }

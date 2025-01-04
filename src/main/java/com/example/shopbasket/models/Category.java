@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Category {
+public class Category implements Identifiable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
