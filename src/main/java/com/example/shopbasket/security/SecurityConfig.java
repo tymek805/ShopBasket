@@ -29,12 +29,12 @@ public class SecurityConfig extends VaadinWebSecurity {
         UserDetails user = User.builder()
                 .username("user")
                 .password(encoder.encode("user"))
-                .roles("USER")
+                .roles(Roles.USER)
                 .build();
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(encoder.encode("admin"))
-                .roles("USER", "ADMIN")
+                .roles(Roles.ADMIN, Roles.USER)
                 .build();
         return new InMemoryUserDetailsManager(user, admin);
     }

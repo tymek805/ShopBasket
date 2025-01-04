@@ -3,6 +3,7 @@ package com.example.shopbasket.views.adminview;
 import com.example.shopbasket.models.Product;
 import com.example.shopbasket.repositories.CategoryRepository;
 import com.example.shopbasket.repositories.ProductRepository;
+import com.example.shopbasket.security.Roles;
 import com.example.shopbasket.views.MainView;
 import com.example.shopbasket.views.forms.ProductForm;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -13,7 +14,7 @@ import jakarta.annotation.security.RolesAllowed;
 
 @Route(value = "admin-products", layout = MainView.class)
 @PageTitle("Admin | Products")
-@RolesAllowed("ADMIN")
+@RolesAllowed(Roles.ADMIN)
 @SpringComponent
 public class AdminProductsView extends AdminView<Product> {
     CategoryRepository categoryRepository;
