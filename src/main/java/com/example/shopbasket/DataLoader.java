@@ -19,6 +19,11 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        Category pieczywo = new Category();
+        pieczywo.setName("Pieczywo");
+        pieczywo.setCode("K1");
+        categoryRepository.save(pieczywo);
+
         Category nabial = new Category();
         nabial.setName("Nabiał");
         nabial.setCode("K2");
@@ -33,6 +38,7 @@ public class DataLoader implements CommandLineRunner {
         chleb.setName("Chleb");
         chleb.setWeight(1.0);
         chleb.setPrice(5.20);
+        chleb.setCategory(pieczywo);
 
         Product maslo = new Product();
         maslo.setName("Masło");

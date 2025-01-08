@@ -7,7 +7,6 @@ import jakarta.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CartCookie {
     private static final String CART_COOKIE = "CART";
@@ -57,6 +56,22 @@ public class CartCookie {
         saveCart(cart);
     }
 
+    public void removeProduct(Product product) {
+        List<String> cart = readCart();
+        int idxToRemove = -1;
+        for (int i = 0; i < cart.size() && idxToRemove == -1; i++) {
+            String[] itemParts = cart.get(i).split(TUPLE_SEPARATOR);
+            if (itemParts.length == 2) {
+                if (product.getId().toString().equals(itemParts[0])) {
+                    idxToRemove = i;
+                }
+            }
+        }
+        if (idxToRemove != -1)
+            cart.remove(idxToRemove);
+        saveCart(cart);
+    }
+
     public Integer getAmount(Product product) {
         return getCartMap().get(product.getId());
     }
@@ -79,7 +94,7 @@ public class CartCookie {
 
     public List<String> readCart() {
         String cookieValue = readCookie();
-        return cookieValue != null ? new ArrayList<>(List.of(cookieValue.split(ITEM_SEPARATOR))) : new ArrayList<>();
+        return cookieValue != null && !cookieValue.isEmpty() ? new ArrayList<>(List.of(cookieValue.split(ITEM_SEPARATOR))) : new ArrayList<>();
     }
 
     private void saveCart(List<String> cart) {
